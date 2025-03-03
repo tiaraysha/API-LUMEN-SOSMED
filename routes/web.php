@@ -20,34 +20,37 @@ $router->get('/', function () use ($router) {
 $router->post('/login', 'UserController@login');
 $router->get('/logout', 'UserController@logout');
 
-$router->group(['prefix' => 'posts'], function() use($router) {
-    $router->post('/', 'PostController@store');
-    $router->get('/show', 'PostController@index');
-    $router->get('/{id}', 'PostController@show');
+$router->group(['middleware' => 'auth'], function () use ($router) {
+
+    $router->group(['prefix' => 'posts'], function() use($router) {
+        $router->post('/', 'PostController@store');
+        $router->get('/show', 'PostController@index');
+        $router->get('/{id}', 'PostController@show');
     $router->patch('/{id}', 'PostController@update');
     $router->delete('/{id}', 'PostController@delete');
-});
+    });
 
-$router->group(['prefix' => 'comments'], function() use($router) {
-    $router->post('/', 'CommentController@store');
-    $router->get('/show', 'CommentController@index');
-    $router->patch('/{id}', 'CommentController@update');
-    $router->delete('/{id}', 'CommentController@delete');
-});
+    $router->group(['prefix' => 'comments'], function() use($router) {
+        $router->post('/', 'CommentController@store');
+        $router->get('/show', 'CommentController@index');
+        $router->patch('/{id}', 'CommentController@update');
+        $router->delete('/{id}', 'CommentController@delete');
+    });
 
-$router->group(['prefix' => 'likes'], function() use($router) {
-    $router->post('/{postId}', 'LikeController@likeUnlike');
-});
+    $router->group(['prefix' => 'likes'], function() use($router) {
+        $router->post('/{postId}', 'LikeController@likeUnlike');
+    });
 
-$router->group(['prefix' => 'follows'], function() use($router) {
-    $router->post('/{id}', 'FollowController@followUnfollow');
-});
+    $router->group(['prefix' => 'follows'], function() use($router) {
+        $router->post('/{id}', 'FollowController@followUnfollow');
+    });
 
-$router->group(['prefix' => 'users'], function () use ($router) {
-    $router->post('/', 'UserController@store');
-    $router->get('/show', 'UserController@index');
-    $router->get('/{id}', 'UserController@show');
-    $router->patch('/{id}', 'UserController@update');
-    $router->delete('/{id}', 'UserController@delete');
-
+    $router->group(['prefix' => 'users'], function () use ($router) {
+        $router->post('/', 'UserController@store');
+        $router->get('/show', 'UserController@index');
+        $router->get('/{id}', 'UserController@show');
+        $router->patch('/{id}', 'UserController@update');
+        $router->delete('/{id}', 'UserController@delete');
+        
+    });
 });
